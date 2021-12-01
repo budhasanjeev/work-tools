@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <Navbar fixed="bottom" variant="light" bg="light">
       <Container>
-        <p className="text-justify">© 2021 Work Tools</p>
+        <p className="mr-auto">© 2021 Work Tools</p>
       </Container>
     </Navbar>
   );
