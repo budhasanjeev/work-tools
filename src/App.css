@@ -7,6 +7,10 @@
   font-size: 24px;
 }
 
+.beforeAfter img {
+  width: 100%;
+}
+
 .mr-auto {
   margin: auto;
 }
