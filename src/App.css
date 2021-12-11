@@ -1,16 +1,37 @@
+.mr-auto {
+  margin: auto;
+}
 .mr-top-20 {
   margin-top: 20px;
 }
 
-.beforeAfter label {
+.modal label {
   color: red;
   font-size: 24px;
 }
-
-.beforeAfter img {
+.modal img {
   width: 100%;
+  height: auto;
+}
+.modal .labelEdit {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
 }
 
-.mr-auto {
-  margin: auto;
+.layout {
+  display: flex;
+  justify-content: center;
+  font-size: 26px;
+  align-items: center;
+}
+.layout svg {
+  margin-left: 10px;
+}
+.layout .deactive {
+  color: #ccc;
+}
+
+.hidden {
+  display: none !important;
 }

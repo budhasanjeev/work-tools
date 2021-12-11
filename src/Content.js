@@ -3,29 +3,34 @@ import {Table,Button,Container,Modal} from 'react-bootstrap';
 import {useState} from 'react';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
+import { faEye, faEdit, faDownload, faArrowsAltV, faArrowsAltH } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Content = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    setShow(true);
-    readURL('before');
-    readURL('after');
+    const beforeImg = $('#before').get(0);
+    const afterImg = $('#after').get(0);
+
+    if (beforeImg.files && beforeImg.files[0] && afterImg.files && afterImg.files[0]) {
+      setShow(true);
+      readURL(beforeImg, 'before');
+      readURL(afterImg, 'after');
+    } else {
+      alert('Please select both images');
+    }
   }
 
-  const readURL = (inputId) => {
-    const input = $(`#${inputId}`).get(0);
-    
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-  
-      reader.onload = function (e) {
-        $(`#modal-${inputId}`).attr('src', e.target.result).width(150).height(200);
-      };
-  
-      reader.readAsDataURL(input.files[0]);
-    }
+  const readURL = (input, id) => {
+    let reader = new FileReader();
+
+    reader.onload = function (e) {
+      $(`#modal-${id}`).attr('src', e.target.result);
+    };
+
+    reader.readAsDataURL(input.files[0]);
   }
 
   const downloadAsImage = () => {
@@ -33,6 +38,16 @@ const Content = () => {
       .then(function (blob) {
         saveAs(blob, "finalresult.png");
       });
+  }
+
+  const handleLayout = (direction) => {
+    console.log('direction: ', direction);
+  }
+
+  const handleEdit = (event) => {
+    const $currTarget = $(event.currentTarget);
+    $currTarget.siblings('label').addClass('hidden');
+    $currTarget.siblings('input').removeClass('hidden');
   }
 
   return (
@@ -51,7 +66,7 @@ const Content = () => {
               <td><input type="file" id="before"/></td>
               <td><input type="file" id="after"/></td>
               <td>
-                <Button variant="primary" onClick={handleShow}>View</Button>{' '}
+                <Button variant="primary" onClick={handleShow}><FontAwesomeIcon icon={faEye} /> Preview </Button>{' '}
                 {/* <Button variant="secondary">Download</Button>{' '} */}
               </td>
             </tr>
@@ -62,25 +77,40 @@ const Content = () => {
         {/* modal starts */}
         <Modal show={show} onHide={handleClose} size="lg">
           <Modal.Header closeButton>
-            <Modal.Title>Final Result</Modal.Title>
+            <Modal.Title>Final Result </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
             <article id="finalResult">
-              <div className="beforeAfter">
-                <label>Before</label><br/>
+              <section className="layout">
+                <label>Layout</label>
+                <div>
+                  <FontAwesomeIcon icon={faArrowsAltV} onClick={() => handleLayout('v')}/>
+                  <FontAwesomeIcon icon={faArrowsAltH} onClick={() => handleLayout('h')} className="deactive"/>
+                </div>
+              </section>
+              <section className="before">
+                <div className="labelEdit">
+                  <label>Before</label>
+                  <input type="text" className="form-control hidden" placeholder="Label you want"/>
+                  <FontAwesomeIcon icon={faEdit} onClick={handleEdit}/> 
+                </div>
                 <img alt="before" src="#" id="modal-before"/>
-              </div>
-              <div className="beforeAfter">
-                <label>After</label><br/>
+              </section>
+              <section className="after">
+                <div className="labelEdit">
+                  <label>After </label>
+                  <input type="text" className="form-control hidden" placeholder="Label you want"/>
+                  <FontAwesomeIcon icon={faEdit} onClick={handleEdit}/> 
+                </div>
                 <img alt="before"src="#" id="modal-after"/>
-              </div>
+              </section>
             </article>
           </Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>Close</Button>
-            <Button variant="secondary" onClick={downloadAsImage}>Download</Button>
+            <Button variant="secondary" onClick={downloadAsImage}><FontAwesomeIcon icon={faDownload} /> Download </Button>
           </Modal.Footer>
         </Modal>
         {/* modal ends */}
